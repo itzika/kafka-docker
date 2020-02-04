@@ -1,0 +1,24 @@
+1. in docker-compose-single-broker.yml add your HOST local ip to KAFKA_ADVERTISED_HOST_NAME 
+
+2. Run ZooKeeper and Kafka Docker:
+docker-compose -f docker-compose-single-broker.yml -d up
+* currently we are it in single broker mode, to run multiple brokers more configuration is needed
+
+3. creare a topic named test1
+from host run the following:
+test\kafka_2.12-2.4.0\bin\kafka-topics.sh --create --bootstrap-server {YOUR_LOCAL_HOST_IP}:9092 --replication-factor 1 --partitions 1 --topic test1
+
+4. make sure the topic is created by listing all topics:
+test\kafka_2.12-2.4.0\bin\kafka-topics.sh --list --bootstrap-server {YOUR_LOCAL_HOST_IP}:9092
+
+5. Start consumer with our topic (test1) and send test message
+test\kafka_2.12-2.4.0\bin\kafka-console-producer.sh --broker-list {YOUR_LOCAL_HOST_IP}:9092 --topic test1
+
+6. Start producer listening to our topic (test1) and get all messages from beginning
+test\kafka_2.12-2.4.0\bin\kafka-console-consumer.sh --bootstrap-server {YOUR_LOCAL_HOST_IP}:9092 --topic test --from-beginning
+
+
+#####
+RESULT
+#####
+You should see the message you sent via the consumer in the producer message list
